@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>УГАДАЙ СЛОВО — 5 БУКВ</title>
-  <meta name="description" content="Угадай русское слово за ограниченное число попыток. Telegram Mini App игра в стиле Wordle.">
+  <meta name="description"
+    content="Угадай русское слово за ограниченное число попыток. Telegram Mini App игра в стиле Wordle.">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -13,7 +15,7 @@
       --bg-primary: #121213;
       --bg-secondary: #1a1a1b;
       --bg-cell-border: #3a3a3c;
-      --bg-correct: #b59f3b;
+      --bg-correct: #fbcd03;
       --bg-present: #ffffff;
       --bg-absent: #3a3a3c;
       --text-primary: #ffffff;
@@ -29,10 +31,17 @@
       --gap: 5px;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    html, body {
-      height: 100%; width: 100%;
+    html,
+    body {
+      height: 100%;
+      width: 100%;
       overflow: hidden;
       background: var(--bg-primary);
       color: var(--text-primary);
@@ -40,903 +49,1295 @@
     }
 
     #app {
-      display: flex; flex-direction: column;
-      height: 100vh; height: 100dvh;
-      max-width: 500px; margin: 0 auto;
-      position: relative; overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
     }
 
     #confetti-canvas {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none; z-index: 100;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
     }
 
     /* ===== HEADER ===== */
     .header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 16px; min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      min-height: 48px;
       border-bottom: 1px solid var(--bg-cell-border);
       flex-shrink: 0;
     }
-    .header-left { display: flex; align-items: center; gap: 8px; }
-    .header-title {
-      font-size: 16px; font-weight: 800;
-      letter-spacing: 2px; text-transform: uppercase;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+
+    .header-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
     .header-back {
-      background: none; border: none; color: var(--text-primary);
-      font-size: 22px; cursor: pointer; padding: 4px 8px;
-      display: flex; align-items: center;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 22px;
+      cursor: pointer;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
       transition: opacity 0.2s;
     }
-    .header-back:active { opacity: 0.5; }
-    .header-right { display: flex; gap: 8px; }
+
+    .header-back:active {
+      opacity: 0.5;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 8px;
+    }
+
     .header-icon {
-      background: none; border: none; color: var(--text-secondary);
-      font-size: 18px; cursor: pointer; padding: 4px;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
     }
 
     /* ===== MENU SCREEN ===== */
     .menu-screen {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 32px 24px; gap: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      gap: 24px;
     }
+
     .menu-logo {
-      font-size: 42px; font-weight: 900;
+      font-size: 42px;
+      font-weight: 900;
       letter-spacing: 6px;
       background: linear-gradient(135deg, var(--accent), #FFA500);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; text-fill-color: transparent;
-      text-align: center; line-height: 1.2;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      text-align: center;
+      line-height: 1.2;
     }
+
     .menu-subtitle {
-      color: var(--text-secondary); font-size: 14px;
-      text-align: center; margin-top: -12px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      text-align: center;
+      margin-top: -12px;
     }
-    .menu-modes { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 300px; }
+
+    .menu-modes {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 300px;
+    }
+
     .menu-mode-btn {
       background: var(--bg-secondary);
       border: 2px solid var(--bg-cell-border);
-      border-radius: 12px; padding: 18px 24px;
-      color: var(--text-primary); font-family: var(--font);
-      font-size: 18px; font-weight: 700;
-      cursor: pointer; text-align: left;
-      display: flex; align-items: center; justify-content: space-between;
+      border-radius: 12px;
+      padding: 18px 24px;
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       transition: all 0.2s ease;
     }
-    .menu-mode-btn:active { transform: scale(0.97); }
-    .menu-mode-btn:hover { border-color: var(--accent); }
+
+    .menu-mode-btn:active {
+      transform: scale(0.97);
+    }
+
+    .menu-mode-btn:hover {
+      border-color: var(--accent);
+    }
+
     .menu-mode-btn .mode-label {
-      display: flex; align-items: center; gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+
     .menu-mode-btn .mode-squares {
-      display: flex; gap: 3px;
+      display: flex;
+      gap: 3px;
     }
+
     .menu-mode-btn .mode-sq {
-      width: 18px; height: 18px; border-radius: 3px;
-      background: var(--accent); opacity: 0.8;
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      background: var(--accent);
+      opacity: 0.8;
     }
+
     .menu-mode-btn .mode-progress {
-      font-size: 12px; color: var(--text-secondary); font-weight: 400;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
     }
+
     .menu-stats-btn {
-      background: none; border: 2px solid var(--bg-cell-border);
-      border-radius: 12px; padding: 14px 24px;
-      color: var(--text-secondary); font-family: var(--font);
-      font-size: 15px; font-weight: 600; cursor: pointer;
-      width: 100%; max-width: 300px;
+      background: none;
+      border: 2px solid var(--bg-cell-border);
+      border-radius: 12px;
+      padding: 14px 24px;
+      color: var(--text-secondary);
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      max-width: 300px;
       transition: all 0.2s ease;
     }
-    .menu-stats-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .menu-stats-btn:active { transform: scale(0.97); }
+
+    .menu-stats-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .menu-stats-btn:active {
+      transform: scale(0.97);
+    }
 
     /* ===== GAME SCREEN ===== */
     .game-screen {
-      flex: 1; display: flex; flex-direction: column;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
     }
+
     .grid-container {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      padding: 8px; overflow-y: auto;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      overflow-y: auto;
     }
+
     .grid {
-      display: flex; flex-direction: column;
-      gap: var(--gap); padding: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      padding: 4px;
     }
+
     .grid-row {
-      display: flex; gap: var(--gap); justify-content: center;
+      display: flex;
+      gap: var(--gap);
+      justify-content: center;
     }
+
     .cell {
-      width: var(--cell-size); height: var(--cell-size);
+      width: var(--cell-size);
+      height: var(--cell-size);
       border: 2px solid var(--bg-cell-border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; font-weight: 800;
-      text-transform: uppercase; border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 800;
+      text-transform: uppercase;
+      border-radius: 4px;
       transition: border-color 0.1s;
       user-select: none;
     }
-    .cell.filled { border-color: #565758; animation: pop 0.1s ease; }
+
+    .cell.filled {
+      border-color: #565758;
+      animation: pop 0.1s ease;
+    }
+
     .cell.correct {
-      background: var(--bg-correct); border-color: var(--bg-correct);
+      background: var(--bg-correct);
+      border-color: var(--bg-correct);
       color: var(--text-on-correct);
     }
+
     .cell.present {
-      background: var(--bg-present); border-color: var(--bg-present);
+      background: var(--bg-present);
+      border-color: var(--bg-present);
       color: var(--text-on-present);
     }
+
     .cell.absent {
-      background: var(--bg-absent); border-color: var(--bg-absent);
+      background: var(--bg-absent);
+      border-color: var(--bg-absent);
     }
 
     /* Flip animation */
     .cell.flip {
       animation: flipIn 0.3s ease forwards;
     }
+
     .cell.flip-out {
       animation: flipOut 0.3s ease forwards;
     }
 
     @keyframes flipIn {
-      0% { transform: rotateX(90deg); }
-      100% { transform: rotateX(0deg); }
+      0% {
+        transform: rotateX(90deg);
+      }
+
+      100% {
+        transform: rotateX(0deg);
+      }
     }
+
     @keyframes flipOut {
-      0% { transform: rotateX(0deg); }
-      100% { transform: rotateX(90deg); }
+      0% {
+        transform: rotateX(0deg);
+      }
+
+      100% {
+        transform: rotateX(90deg);
+      }
     }
+
     @keyframes pop {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.12); }
-      100% { transform: scale(1); }
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.12);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
+
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-5px); }
-      40% { transform: translateX(5px); }
-      60% { transform: translateX(-5px); }
-      80% { transform: translateX(5px); }
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-5px);
+      }
+
+      40% {
+        transform: translateX(5px);
+      }
+
+      60% {
+        transform: translateX(-5px);
+      }
+
+      80% {
+        transform: translateX(5px);
+      }
     }
-    .grid-row.shake { animation: shake 0.4s ease; }
+
+    .grid-row.shake {
+      animation: shake 0.4s ease;
+    }
+
     @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-14px); }
-      60% { transform: translateY(-7px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      30% {
+        transform: translateY(-14px);
+      }
+
+      60% {
+        transform: translateY(-7px);
+      }
     }
-    .grid-row.bounce .cell { animation: bounce 0.6s ease; }
+
+    .grid-row.bounce .cell {
+      animation: bounce 0.6s ease;
+    }
 
     /* ===== KEYBOARD ===== */
     .keyboard {
-      padding: 6px 4px 12px; flex-shrink: 0;
+      padding: 6px 4px 12px;
+      flex-shrink: 0;
     }
+
     .kb-row {
-      display: flex; justify-content: center;
-      gap: 4px; margin-bottom: 4px;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 4px;
     }
+
     .key {
-      height: 50px; min-width: 28px;
-      border: none; border-radius: 4px;
+      height: 50px;
+      min-width: 28px;
+      border: none;
+      border-radius: 4px;
       background: var(--key-bg);
       color: var(--key-text);
       font-family: var(--font);
-      font-size: 15px; font-weight: 600;
-      cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-transform: uppercase;
       transition: background 0.2s, color 0.2s, transform 0.1s;
-      flex: 1; max-width: 36px;
-      user-select: none; -webkit-user-select: none;
+      flex: 1;
+      max-width: 36px;
+      user-select: none;
+      -webkit-user-select: none;
     }
-    .key:active { transform: scale(0.92); }
-    .key.wide { min-width: 48px; max-width: 52px; font-size: 20px; }
-    .key.correct { background: var(--bg-correct); color: var(--text-on-correct); }
-    .key.present { background: var(--bg-present); color: var(--text-on-present); }
-    .key.absent { background: #2c2c2e; color: #58585a; }
+
+    .key:active {
+      transform: scale(0.92);
+    }
+
+    .key.wide {
+      min-width: 48px;
+      max-width: 52px;
+      font-size: 20px;
+    }
+
+    .key.correct {
+      background: var(--bg-correct);
+      color: var(--text-on-correct);
+    }
+
+    .key.present {
+      background: var(--bg-present);
+      color: var(--text-on-present);
+    }
+
+    .key.absent {
+      background: #2c2c2e;
+      color: #58585a;
+    }
 
     /* ===== TOAST ===== */
     .toast-container {
-      position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
-      z-index: 50; display: flex; flex-direction: column; gap: 8px; align-items: center;
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
     }
+
     .toast {
-      background: var(--text-primary); color: var(--bg-primary);
-      padding: 10px 20px; border-radius: 8px;
-      font-size: 14px; font-weight: 700;
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
       animation: fadeInOut 2s ease forwards;
       white-space: nowrap;
     }
+
     @keyframes fadeInOut {
-      0% { opacity: 0; transform: translateY(-10px); }
-      15% { opacity: 1; transform: translateY(0); }
-      75% { opacity: 1; }
-      100% { opacity: 0; }
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      15% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      75% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
     }
 
     /* ===== MODAL ===== */
     .modal-overlay {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.7); z-index: 80;
-      display: flex; align-items: center; justify-content: center;
-      padding: 24px; animation: fadeIn 0.3s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      animation: fadeIn 0.3s ease;
     }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
     .modal {
-      background: var(--bg-secondary); border-radius: 16px;
-      padding: 28px 24px; max-width: 340px; width: 100%;
-      text-align: center; animation: slideUp 0.3s ease;
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      padding: 28px 24px;
+      max-width: 340px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp 0.3s ease;
     }
+
     @keyframes slideUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
-    .modal h2 { font-size: 22px; margin-bottom: 8px; font-weight: 800; }
-    .modal p { color: var(--text-secondary); margin-bottom: 20px; font-size: 14px; }
+
+    .modal h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .modal p {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
     .modal .word-reveal {
-      font-size: 28px; font-weight: 900; letter-spacing: 6px;
-      color: var(--accent); margin: 12px 0 20px;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: var(--accent);
+      margin: 12px 0 20px;
     }
+
     .modal-btn {
-      background: var(--accent); color: var(--bg-primary);
-      border: none; border-radius: 8px;
-      padding: 12px 28px; font-family: var(--font);
-      font-size: 15px; font-weight: 700; cursor: pointer;
-      margin: 4px; transition: transform 0.1s;
+      background: var(--accent);
+      color: var(--bg-primary);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 28px;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 4px;
+      transition: transform 0.1s;
     }
-    .modal-btn:active { transform: scale(0.95); }
+
+    .modal-btn:active {
+      transform: scale(0.95);
+    }
+
     .modal-btn.secondary {
-      background: var(--bg-cell-border); color: var(--text-primary);
+      background: var(--bg-cell-border);
+      color: var(--text-primary);
     }
 
     /* ===== STATS SCREEN ===== */
     .stats-screen {
-      flex: 1; overflow-y: auto; padding: 20px 16px 32px;
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px 32px;
       -webkit-overflow-scrolling: touch;
     }
+
     .stats-tabs {
-      display: flex; gap: 0; margin-bottom: 20px;
-      border-radius: 8px; overflow: hidden;
+      display: flex;
+      gap: 0;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
       border: 1px solid var(--bg-cell-border);
     }
+
     .stats-tab {
-      flex: 1; padding: 10px; border: none;
-      background: var(--bg-secondary); color: var(--text-secondary);
-      font-family: var(--font); font-size: 14px; font-weight: 600;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .stats-tab.active {
-      background: var(--accent); color: var(--bg-primary);
-    }
-    .stats-overview {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 8px; margin-bottom: 24px;
-    }
-    .stat-card {
-      background: var(--bg-secondary); border-radius: 10px;
-      padding: 14px 8px; text-align: center;
-    }
-    .stat-value {
-      font-size: 28px; font-weight: 900; color: var(--accent);
-    }
-    .stat-label {
-      font-size: 10px; color: var(--text-secondary);
-      margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .stats-section-title {
-      font-size: 14px; font-weight: 700; color: var(--text-secondary);
-      margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;
-    }
-    .distribution { display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px; }
-    .dist-row { display: flex; align-items: center; gap: 8px; }
-    .dist-label { font-size: 13px; font-weight: 700; width: 16px; text-align: right; }
-    .dist-bar-wrap { flex: 1; height: 24px; position: relative; }
-    .dist-bar {
-      height: 100%; border-radius: 4px;
-      background: var(--bg-cell-border);
-      min-width: 24px; display: flex;
-      align-items: center; justify-content: flex-end;
-      padding-right: 8px; font-size: 12px; font-weight: 700;
-      transition: width 0.5s ease;
-    }
-    .dist-bar.highlight { background: var(--accent); color: var(--bg-primary); }
-    .stats-reset {
-      background: none; border: 1px solid #ff4444;
-      color: #ff4444; border-radius: 8px;
-      padding: 10px 20px; font-family: var(--font);
-      font-size: 13px; font-weight: 600; cursor: pointer;
-      width: 100%; margin-top: 12px;
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
       transition: all 0.2s;
     }
-    .stats-reset:active { background: #ff4444; color: white; }
+
+    .stats-tab.active {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .stats-overview {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 14px 8px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stats-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .distribution {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 24px;
+    }
+
+    .dist-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dist-label {
+      font-size: 13px;
+      font-weight: 700;
+      width: 16px;
+      text-align: right;
+    }
+
+    .dist-bar-wrap {
+      flex: 1;
+      height: 24px;
+      position: relative;
+    }
+
+    .dist-bar {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--bg-cell-border);
+      min-width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: width 0.5s ease;
+    }
+
+    .dist-bar.highlight {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .stats-reset {
+      background: none;
+      border: 1px solid #ff4444;
+      color: #ff4444;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+      transition: all 0.2s;
+    }
+
+    .stats-reset:active {
+      background: #ff4444;
+      color: white;
+    }
 
     /* ===== RESPONSIVE ===== */
     @media (max-height: 650px) {
-      :root { --cell-size: 46px; }
-      .cell { font-size: 22px; }
-      .key { height: 44px; }
+      :root {
+        --cell-size: 46px;
+      }
+
+      .cell {
+        font-size: 22px;
+      }
+
+      .key {
+        height: 44px;
+      }
     }
+
     @media (max-height: 580px) {
-      :root { --cell-size: 38px; --gap: 3px; }
-      .cell { font-size: 18px; }
-      .key { height: 40px; font-size: 13px; }
+      :root {
+        --cell-size: 38px;
+        --gap: 3px;
+      }
+
+      .cell {
+        font-size: 18px;
+      }
+
+      .key {
+        height: 40px;
+        font-size: 13px;
+      }
     }
+
     @media (max-width: 360px) {
-      .key { min-width: 24px; font-size: 13px; }
+      .key {
+        min-width: 24px;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
+
 <body>
   <div id="app"></div>
   <canvas id="confetti-canvas"></canvas>
 
-<script>
-/* ===================================================================
-   УГАДАЙ СЛОВО — Telegram Mini App
-   Wordle-like game with 5, 6, and 7 letter Russian words
-   =================================================================== */
+  <script>
+    /* ===================================================================
+       УГАДАЙ СЛОВО — Telegram Mini App
+       Wordle-like game with 5, 6, and 7 letter Russian words
+       =================================================================== */
 
-// ===== TELEGRAM INTEGRATION =====
-const tg = window.Telegram?.WebApp;
-if (tg) { tg.ready(); tg.expand(); }
-const userId = tg?.initDataUnsafe?.user?.id || 'anonymous';
+    // ===== TELEGRAM INTEGRATION =====
+    const tg = window.Telegram?.WebApp;
+    if (tg) { tg.ready(); tg.expand(); }
+    const userId = tg?.initDataUnsafe?.user?.id || 'anonymous';
 
-function haptic(type) {
-  try {
-    if (type === 'light') tg?.HapticFeedback?.impactOccurred('light');
-    else if (type === 'success') tg?.HapticFeedback?.notificationOccurred('success');
-    else if (type === 'error') tg?.HapticFeedback?.notificationOccurred('error');
-  } catch(e) {}
-}
-
-// ===== WORD LISTS =====
-const WORDS_5 = [
-  'АБЗАЦ','АВТОР','АЛМАЗ','АНГЕЛ','АРБУЗ','АТЛАС','БАГАЖ','БАЛЕТ','БАНАН','БАРОН',
-  'БАТОН','БЕРЕГ','БИЛЕТ','БЛЮДО','БОКАЛ','БОРЕЦ','БОЧКА','БУКВА','ВЕСНА','ВАГОН',
-  'ВИЗИТ','ВИЛКА','ВКЛАД','ВОКАЛ','ВОЛНА','ВОРОН','ВРЕМЯ','ВЫБОР','ВЫЗОВ','ГАЗОН',
-  'ГАРАЖ','ГЛИНА','ГОЛОС','ГОРОД','ГОРОХ','ГРАММ','ГРАНЬ','ГРИЛЬ','ГРУША','ДАВКА',
-  'ДЕБЮТ','ДЕСНА','ДИВАН','ДЛИНА','ДОМИК','ДРОВА','ДРОЗД','ДУМКА','ДЯТЕЛ','ЖЕНИХ',
-  'ЖЕТОН','ЖИРАФ','ЗАБОР','ЗАВОД','ЗАМОК','ЗАПАС','ЗЕБРА','ЗЕНИТ','ЗЕРНО','ЗНАМЯ',
-  'ИДЕАЛ','ИНДЮК','ИСКРА','КАБАН','КАЗАК','КАЛАЧ','КАМИН','КАНАЛ','КАРТА','КАТОК',
-  'КИСТЬ','КЛАСС','КЛОУН','КОБРА','КОМАР','КОНУС','КОСТЬ','КРЕСТ','КУБОК','КУЛАК',
-  'КУПЕЦ','КУРОК','КУСОК','ЛАВКА','ЛАДЬЯ','ЛАМПА','ЛАРЕЦ','ЛЕНТА','ЛИМОН','ЛИНЗА',
-  'ЛОДКА','ЛУЖОК','МАЗОК','МАЙКА','МАКЕТ','МАЛЯР','МАНГО','МАРКА','МАСКА','МАСЛО',
-  'МАФИЯ','МЕСЯЦ','МЕЧТА','МИРАЖ','МОЛОТ','МОРЯК','МУШКА','НАБОР','НАДЕЛ','НАКАЛ',
-  'НАЛОГ','НАПОР','НАРОД','НАУКА','НЕРПА','НИТКА','НОРКА','ОБЗОР','ОВРАГ','ОГОНЬ',
-  'ОКЕАН','ОПЕРА','ОРДЕН','ОТВЕТ','ОТРЯД','ОЧЕРК','ПАЛЕЦ','ПАРАД','ПАРУС','ПАУЗА',
-  'ПЕНАЛ','ПЕРЕЦ','ПЕЧКА','ПИЛОТ','ПИРОГ','ПЛЕЧО','ПОВАР','ПОЛКА','ПОРОГ','ПОХОД',
-  'ПОЧТА','ПРАВО','ПРОБА','ПУЛЬТ','РАДАР','РАЙОН','РАМКА','РАНЕЦ','РЕБУС','РЕНТА',
-  'РЕЧКА','РЕШКА','РОБОТ','РОЛИК','РУБЕЖ','РУПОР','РУСЛО','РЫНОК','САБЛЯ','САДИК',
-  'САЛАТ','САНКИ','САХАР','СВЕЧА','СЕРИЯ','СИРОП','СКЛАД','СЛИВА','СЛОВО','СМЕНА',
-  'СОСЕД','СПОРТ','СТЕНА','СТИЛЬ','СТОЛБ','СУМКА','ТАБАК','ТАЙНА','ТАНЕЦ','ТЕАТР',
-  'ТИРАЖ','ТКАНЬ','ТОВАР','ТОЛПА','ТОПОР','ТОСКА','ТОЧКА','ТРАВА','ТРЕНД','ТУМБА',
-  'УДАЧА','УЗНИК','УКЛОН','УЛИКА','ФАКЕЛ','ФАСАД','ФИНАЛ','ФОКУС','ФОРМА','ФРУКТ',
-];
-
-const WORDS_6 = [
-  'АЗБУКА','АПТЕКА','БАКЛАН','БАЛЛОН','БАМПЕР','БАНКЕТ','БАРДАК','БИЗНЕС','БИРЮЗА','БОЛОТО',
-  'БОРОДА','БРЕВНО','БУБЛИК','БУМАГА','БУНКЕР','ВАННАЯ','ВЕРМУТ','ВНУЧКА','ВОЗДУХ','ВОКЗАЛ',
-  'ВОРОТА','ГАВАНЬ','ГВОЗДЬ','ГЛОБУС','ГНЕЗДО','ГОЛУБЬ','ГРАФИК','ГРОЗДЬ','ДВОРЕЦ','ДЕБАТЫ',
-  'ДЕКРЕТ','ДЕСЕРТ','ДОБЫЧА','ДОЖДИК','ДОЛИНА','ДОМИНО','ДОРОГА','ДРАКОН','ЖЕЛТОК','ЖЕМЧУГ',
-  'ЖЕРТВА','ЖУРНАЛ','ЗАМЕНА','ЗАПРЕТ','ЗАЩИТА','ЗВОНОК','ИГОЛКА','КАБЛУК','КАЛИНА','КАРНИЗ',
-  'КВАРТА','КИРПИЧ','КИСЕЛЬ','КЛУБОК','КОВРИК','КОЗЛИК','КОЛЕСО','КОМЕТА','КОМПАС','КОНДОР',
-  'КОСМОС','КОШМАР','КРИЗИС','КУЗНЕЦ','КУРИЦА','ЛАДОНЬ','ЛАНДЫШ','ЛИСТОК','ЛОПАТА','ЛОСОСЬ',
-  'ЛОШАДЬ','МАГНИТ','МАНТИЯ','МАРШАЛ','МЕДАЛЬ','МИНУТА','МОНЕТА','МУСКУЛ','МУЗЫКА','НАГЛЕЦ',
-  'НАСЕСТ','НЕКТАР','ОБЛАКО','ОВАЦИЯ','ОГУРЕЦ','ОПЛАТА','ОПТИКА','ОТВАГА','ОХРАНА','ПАЛУБА',
-  'ПАНИКА','ПАРЕНЬ','ПАРНИК','ПАСЕКА','ПАСТУХ','ПАТРОН','ПЕЙЗАЖ','ПЕНСИЯ','ПЕРЧИК','ПЕЧЕНЬ',
-  'ПИДЖАК','ПЛАКАТ','ПЛОТИК','ПОБЕДА','ПОДВАЛ','ПОДХОД','ПОЛОСА','ПОЛЫНЬ','ПОМАДА','ПОРОДА',
-  'ПОСУДА','ПОЧЕРК','ПРИВЕТ','ПРОВОД','ПТЕНЕЦ','ПУСТЯК','РАБОТА','РАЗМЕР','РАКЕТА','РАССОЛ',
-  'РЕЛЬЕФ','РЕМЕНЬ','РЕСУРС','РЕЦЕПТ','РЫЦАРЬ','РЯБИНА','САПОГИ','САТИРА','СЕКРЕТ','СИГНАЛ',
-  'СИМВОЛ','СКАЗКА','СКАЛКА','СОБАКА','СОЛДАТ','СПИЧКА','СТАКАН','СТАРИК','СТРЕЛА','СУДЬБА',
-  'СУГРОБ','СУНДУК','ТАЙНИК','ТАЙФУН','ТАЛАНТ','ТЕРМОС','ТОПОЛЬ','ТОРМОЗ','ТРОСТЬ','ТРЯПКА',
-  'ТУРИСТ','ТЮРЬМА','УГОЛОК','УДОЧКА','ФАСОЛЬ','ФИГУРА','ФОНАРЬ','ФОНТАН','ФОРМАТ','ФУНДУК',
-  'ХИЖИНА','ХОЗЯИН','ЦВЕТОК','ЦЕМЕНТ','ЧАЙНИК','ЧЕРДАК','ШАМПУР','ШЛЮПКА','ШЛЯПКА','ЩЕБЕНЬ',
-  'ДВЕРЦА','ГЕРАНЬ','СЕРЬГА','БАЛКОН','БЕДНЯК','КНОПКА','РЫБАЛК','НАРЗАН','ПЧЕЛКА','ЭСТРАД',
-  'ГРЯДКА','ПОЛЬКА','ГИТАРА','КЛУМБА','КЕПОЧК','ГАНТЕЛ','ЖИЛИЩА','КЛОПИК','ТЕЛЕЖК','ПИРОЖО',
-  'КНОПКЕ','БУЙВОЛ','БАЗУКА','ВАЛЮТА','ЛЫЖНИК','КАЛИТК','МАНЖЕТ','МАРКИЗ','ПЛАТОК','ЯБЛОКО',
-];
-
-const WORDS_7 = [
-  'АБРИКОС','АВОКАДО','АКРОБАТ','АЛГЕБРА','АНТЕННА','АППАРАТ','АССОРТИ','АУКЦИОН','БАБОЧКА','БАКАЛЕЯ',
-  'БАЛЬЗАМ','БАРАНКА','БАСТИОН','БЕРЛОГА','БИЛЬЯРД','БОЛЕЗНЬ','БРОДЯГА','БУМАЖКА','БУТЫЛКА','ВАЛЕНОК',
-  'ВАРЕНИК','ВЕНТИЛЬ','ВЕРБЛЮД','ВЕРСТАК','ВИШЕНКА','ВОДОПАД','ВОРОБЕЙ','ВЫИГРЫШ','ГВАРДИЯ','ГЕНЕРАЛ',
-  'ГОРЧИЦА','ГАЛЕРЕЯ','ГЛАЗУРЬ','ГОЛУБКА','ГРОМАДА','ДЕВУШКА','ДЕРЕВНЯ','ДЕСЯТКА','ДЕТСТВО','ДНЕВНИК',
-  'ДОБАВКА','ДОВЕРИЕ','ДОРОЖКА','ДУБИНКА','ДУХОВКА','ЖУРАВЛЬ','ЗАГАДКА','ЗАКАТКА','ЗАПИСКА','ЗАПЛАТА',
-  'ЗАСОЛКА','ЗЕРКАЛО','ИЗДЕЛИЕ','ИЛЛЮЗИЯ','ИЗБУШКА','КАЛИТКА','КАМБАЛА','КАПУСТА','КАРАВАН','КАРТИНА',
-  'КИПАРИС','КОКЕТКА','КОЛБАСА','КОЛОДЕЦ','КОМЕДИЯ','КОПЕЙКА','КОРОБКА','КОРЗИНА','КРАСОТА','КРОВАТЬ',
-  'КРАПИВА','КРУПИЦА','ЛАВОЧКА','ЛИМОНАД','ЛИСИЧКА','ЛОВУШКА','ЛОПАТКА','ЛЯГУШКА','МАГАЗИН','МАЛИНКА',
-  'МАШИНКА','МЕДВЕДЬ','МОЛОТОК','МОРКОВЬ','НАДПИСЬ','НАЧИНКА','ОБЛАЧКО','ПАЛЬЧИК','ПАРОВОЗ','ПОДУШКА',
-  'ПОЛОТНО','ПШЕНИЦА','РАССВЕТ','РОЗЕТКА','РУСАЛКА','СЕКУНДА','СОЛОВЕЙ','СУВЕНИР','СЧАСТЬЕ','ТАРЕЛКА',
-  'ТЕТРАДЬ','ТРАКТОР','ЧЕМОДАН','ВИЗИТКА','ВРАТАРЬ','ВЫДУМКА','ГАРМОНЬ','ЗАТЫЧКА','ЗУБАТКА','КАБИНКА',
-  'ЛЕПЕШКА','ЛУКОВКА','ВЯЗАНКА','ГРАМОТА','ЗАЛЕЖКА','ЗАНАВЕС','ЗАПРАВА','ЗАСТАВА','ЗОЛОТКО','КАНАВКА',
-  'КЛАДОВК','КОНФЕТА','КОШЕЧКА','КРАСАВК','КУКУШКА','КУРОЧКА','КУХАРКА','ЛАМПОЧК','ЛЕТУЧКА','ПРОГУЛК',
-  'ПЫЛИНКА','РАКУШКА','ТРЯПОЧК','СВЯЗИСТ','САМОВАР','САПОЖОК','СИДЕЛКА','СНЕЖИНК','СОЛОНКА','СТОЯНКА',
-  'ТАЙНИКО','ТВОРОЖО','ТИГРИЦА','ТРОСТОЧ','УЛЫБОЧК','ХОЗЯЙКА','ШКАТУЛК','ЩЕКОЛДА','БАРЫШНЯ','ЗАДВИЖК',
-  'КЛЕЕНКА','ПОКУПКА','КОРОЧКА','КУВАЛДА','МАТРИЦА','ПРОБИРК','РЕАКЦИЯ','ПОЗИЦИЯ','СТАНЦИЯ','ТЕРАПИЯ',
-  'КАПИТАН','КАРАПУЗ','ЛАВАНДА','ТРЕВОГА','ЦАРЕВНА','ДЕВОЧКА','ПАЛАТКА','НАКИДКА','ГРИБНИК','ГОЛОСОК',
-  'БАЛЕРИН','ПОДВИЖК','СТРОЧКА','ЖАРОВНЯ','КАСТРЮЛ','ВЕРЕВКА','НОСИЛКА','ЗАДАЧКА','ТУШЕНКА','НАЖИВКА',
-  'МЕЛОДИЯ','НАТЯЖКА','ЗАВАРКА','МЕТЕЛКА','ТРЕЩИНА','ПРИЩЕПК','ПОДНОЖК','ВАТРУШК','ПРИЧУДА','ЯГОДИЦА',
-  'ТАБУРЕТ','БРАСЛЕТ','ГРАНИЦА','ЗАМОРОК','ЦАРАПИН','ЛАНДШАФ','СНАСТОЧ','ЛЕСЕНКА','СМОТРОВ','ЦАРСТВО',
-];
-
-// ===== SEEDED SHUFFLE =====
-function seededShuffle(arr, seed) {
-  const a = [...arr];
-  let s = seed;
-  function rng() { s = (s * 16807 + 0) % 2147483647; return (s - 1) / 2147483646; }
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-const numSeed = typeof userId === 'number' ? userId : hashStr(String(userId));
-function hashStr(s) { let h = 0; for (let i = 0; i < s.length; i++) { h = ((h << 5) - h + s.charCodeAt(i)) | 0; } return Math.abs(h); }
-
-const SHUFFLED = {
-  5: seededShuffle(WORDS_5, numSeed),
-  6: seededShuffle(WORDS_6, numSeed),
-  7: seededShuffle(WORDS_7, numSeed),
-};
-
-// ===== WORD VALIDATION VIA WIKTIONARY =====
-// Cache validated words to avoid repeat API calls
-const validWordCache = new Map();
-
-// Pre-seed cache with all target words (they are definitely valid)
-[...WORDS_5, ...WORDS_6, ...WORDS_7].forEach(w => validWordCache.set(w, true));
-
-async function isValidRussianWord(word) {
-  const upper = word.toUpperCase();
-  
-  // Check cache first
-  if (validWordCache.has(upper)) return validWordCache.get(upper);
-  
-  try {
-    const lower = word.toLowerCase();
-    // Fetch wikitext to check if the word is a noun (существительное)
-    const url = `https://ru.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(lower)}&prop=wikitext&format=json&origin=*`;
-    const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
-    const data = await response.json();
-    
-    // If page doesn't exist, parse returns error
-    if (data.error) {
-      validWordCache.set(upper, false);
-      return false;
+    function haptic(type) {
+      try {
+        if (type === 'light') tg?.HapticFeedback?.impactOccurred('light');
+        else if (type === 'success') tg?.HapticFeedback?.notificationOccurred('success');
+        else if (type === 'error') tg?.HapticFeedback?.notificationOccurred('error');
+      } catch (e) { }
     }
-    
-    const wikitext = data.parse.wikitext['*'];
-    // Check for Russian noun markers in wikitext:
-    // {{сущ ru — standard noun template
-    // {{Существительное — alternative heading
-    const isNoun = /\{\{сущ[\s-]ru/i.test(wikitext) || 
-                   /===\s*Существительное/i.test(wikitext) ||
-                   /\{\{сущ[\s-]be/i.test(wikitext);
-    validWordCache.set(upper, isNoun);
-    return isNoun;
-  } catch (e) {
-    // Network error or timeout — accept the word to not block gameplay
-    validWordCache.set(upper, true);
-    return true;
-  }
-}
 
-let isValidating = false;
+    // ===== WORD LISTS =====
+    const WORDS_5 = [
+      'АБЗАЦ', 'АВТОР', 'АЛМАЗ', 'АНГЕЛ', 'АРБУЗ', 'АТЛАС', 'БАГАЖ', 'БАЛЕТ', 'БАНАН', 'БАРОН',
+      'БАТОН', 'БЕРЕГ', 'БИЛЕТ', 'БЛЮДО', 'БОКАЛ', 'БОРЕЦ', 'БОЧКА', 'БУКВА', 'ВЕСНА', 'ВАГОН',
+      'ВИЗИТ', 'ВИЛКА', 'ВКЛАД', 'ВОКАЛ', 'ВОЛНА', 'ВОРОН', 'ВРЕМЯ', 'ВЫБОР', 'ВЫЗОВ', 'ГАЗОН',
+      'ГАРАЖ', 'ГЛИНА', 'ГОЛОС', 'ГОРОД', 'ГОРОХ', 'ГРАММ', 'ГРАНЬ', 'ГРИЛЬ', 'ГРУША', 'ДАВКА',
+      'ДЕБЮТ', 'ДЕСНА', 'ДИВАН', 'ДЛИНА', 'ДОМИК', 'ДРОВА', 'ДРОЗД', 'ДУМКА', 'ДЯТЕЛ', 'ЖЕНИХ',
+      'ЖЕТОН', 'ЖИРАФ', 'ЗАБОР', 'ЗАВОД', 'ЗАМОК', 'ЗАПАС', 'ЗЕБРА', 'ЗЕНИТ', 'ЗЕРНО', 'ЗНАМЯ',
+      'ИДЕАЛ', 'ИНДЮК', 'ИСКРА', 'КАБАН', 'КАЗАК', 'КАЛАЧ', 'КАМИН', 'КАНАЛ', 'КАРТА', 'КАТОК',
+      'КИСТЬ', 'КЛАСС', 'КЛОУН', 'КОБРА', 'КОМАР', 'КОНУС', 'КОСТЬ', 'КРЕСТ', 'КУБОК', 'КУЛАК',
+      'КУПЕЦ', 'КУРОК', 'КУСОК', 'ЛАВКА', 'ЛАДЬЯ', 'ЛАМПА', 'ЛАРЕЦ', 'ЛЕНТА', 'ЛИМОН', 'ЛИНЗА',
+      'ЛОДКА', 'ЛУЖОК', 'МАЗОК', 'МАЙКА', 'МАКЕТ', 'МАЛЯР', 'МАНГО', 'МАРКА', 'МАСКА', 'МАСЛО',
+      'МАФИЯ', 'МЕСЯЦ', 'МЕЧТА', 'МИРАЖ', 'МОЛОТ', 'МОРЯК', 'МУШКА', 'НАБОР', 'НАДЕЛ', 'НАКАЛ',
+      'НАЛОГ', 'НАПОР', 'НАРОД', 'НАУКА', 'НЕРПА', 'НИТКА', 'НОРКА', 'ОБЗОР', 'ОВРАГ', 'ОГОНЬ',
+      'ОКЕАН', 'ОПЕРА', 'ОРДЕН', 'ОТВЕТ', 'ОТРЯД', 'ОЧЕРК', 'ПАЛЕЦ', 'ПАРАД', 'ПАРУС', 'ПАУЗА',
+      'ПЕНАЛ', 'ПЕРЕЦ', 'ПЕЧКА', 'ПИЛОТ', 'ПИРОГ', 'ПЛЕЧО', 'ПОВАР', 'ПОЛКА', 'ПОРОГ', 'ПОХОД',
+      'ПОЧТА', 'ПРАВО', 'ПРОБА', 'ПУЛЬТ', 'РАДАР', 'РАЙОН', 'РАМКА', 'РАНЕЦ', 'РЕБУС', 'РЕНТА',
+      'РЕЧКА', 'РЕШКА', 'РОБОТ', 'РОЛИК', 'РУБЕЖ', 'РУПОР', 'РУСЛО', 'РЫНОК', 'САБЛЯ', 'САДИК',
+      'САЛАТ', 'САНКИ', 'САХАР', 'СВЕЧА', 'СЕРИЯ', 'СИРОП', 'СКЛАД', 'СЛИВА', 'СЛОВО', 'СМЕНА',
+      'СОСЕД', 'СПОРТ', 'СТЕНА', 'СТИЛЬ', 'СТОЛБ', 'СУМКА', 'ТАБАК', 'ТАЙНА', 'ТАНЕЦ', 'ТЕАТР',
+      'ТИРАЖ', 'ТКАНЬ', 'ТОВАР', 'ТОЛПА', 'ТОПОР', 'ТОСКА', 'ТОЧКА', 'ТРАВА', 'ТРЕНД', 'ТУМБА',
+      'УДАЧА', 'УЗНИК', 'УКЛОН', 'УЛИКА', 'ФАКЕЛ', 'ФАСАД', 'ФИНАЛ', 'ФОКУС', 'ФОРМА', 'ФРУКТ',
+    ];
 
-// ===== STATE MANAGEMENT =====
-const STORAGE_KEY = `wordgame_${userId}`;
+    const WORDS_6 = [
+      'АЗБУКА', 'АПТЕКА', 'БАКЛАН', 'БАЛЛОН', 'БАМПЕР', 'БАНКЕТ', 'БАРДАК', 'БИЗНЕС', 'БИРЮЗА', 'БОЛОТО',
+      'БОРОДА', 'БРЕВНО', 'БУБЛИК', 'БУМАГА', 'БУНКЕР', 'ВАННАЯ', 'ВЕРМУТ', 'ВНУЧКА', 'ВОЗДУХ', 'ВОКЗАЛ',
+      'ВОРОТА', 'ГАВАНЬ', 'ГВОЗДЬ', 'ГЛОБУС', 'ГНЕЗДО', 'ГОЛУБЬ', 'ГРАФИК', 'ГРОЗДЬ', 'ДВОРЕЦ', 'ДЕБАТЫ',
+      'ДЕКРЕТ', 'ДЕСЕРТ', 'ДОБЫЧА', 'ДОЖДИК', 'ДОЛИНА', 'ДОМИНО', 'ДОРОГА', 'ДРАКОН', 'ЖЕЛТОК', 'ЖЕМЧУГ',
+      'ЖЕРТВА', 'ЖУРНАЛ', 'ЗАМЕНА', 'ЗАПРЕТ', 'ЗАЩИТА', 'ЗВОНОК', 'ИГОЛКА', 'КАБЛУК', 'КАЛИНА', 'КАРНИЗ',
+      'КВАРТА', 'КИРПИЧ', 'КИСЕЛЬ', 'КЛУБОК', 'КОВРИК', 'КОЗЛИК', 'КОЛЕСО', 'КОМЕТА', 'КОМПАС', 'КОНДОР',
+      'КОСМОС', 'КОШМАР', 'КРИЗИС', 'КУЗНЕЦ', 'КУРИЦА', 'ЛАДОНЬ', 'ЛАНДЫШ', 'ЛИСТОК', 'ЛОПАТА', 'ЛОСОСЬ',
+      'ЛОШАДЬ', 'МАГНИТ', 'МАНТИЯ', 'МАРШАЛ', 'МЕДАЛЬ', 'МИНУТА', 'МОНЕТА', 'МУСКУЛ', 'МУЗЫКА', 'НАГЛЕЦ',
+      'НАСЕСТ', 'НЕКТАР', 'ОБЛАКО', 'ОВАЦИЯ', 'ОГУРЕЦ', 'ОПЛАТА', 'ОПТИКА', 'ОТВАГА', 'ОХРАНА', 'ПАЛУБА',
+      'ПАНИКА', 'ПАРЕНЬ', 'ПАРНИК', 'ПАСЕКА', 'ПАСТУХ', 'ПАТРОН', 'ПЕЙЗАЖ', 'ПЕНСИЯ', 'ПЕРЧИК', 'ПЕЧЕНЬ',
+      'ПИДЖАК', 'ПЛАКАТ', 'ПЛОТИК', 'ПОБЕДА', 'ПОДВАЛ', 'ПОДХОД', 'ПОЛОСА', 'ПОЛЫНЬ', 'ПОМАДА', 'ПОРОДА',
+      'ПОСУДА', 'ПОЧЕРК', 'ПРИВЕТ', 'ПРОВОД', 'ПТЕНЕЦ', 'ПУСТЯК', 'РАБОТА', 'РАЗМЕР', 'РАКЕТА', 'РАССОЛ',
+      'РЕЛЬЕФ', 'РЕМЕНЬ', 'РЕСУРС', 'РЕЦЕПТ', 'РЫЦАРЬ', 'РЯБИНА', 'САПОГИ', 'САТИРА', 'СЕКРЕТ', 'СИГНАЛ',
+      'СИМВОЛ', 'СКАЗКА', 'СКАЛКА', 'СОБАКА', 'СОЛДАТ', 'СПИЧКА', 'СТАКАН', 'СТАРИК', 'СТРЕЛА', 'СУДЬБА',
+      'СУГРОБ', 'СУНДУК', 'ТАЙНИК', 'ТАЙФУН', 'ТАЛАНТ', 'ТЕРМОС', 'ТОПОЛЬ', 'ТОРМОЗ', 'ТРОСТЬ', 'ТРЯПКА',
+      'ТУРИСТ', 'ТЮРЬМА', 'УГОЛОК', 'УДОЧКА', 'ФАСОЛЬ', 'ФИГУРА', 'ФОНАРЬ', 'ФОНТАН', 'ФОРМАТ', 'ФУНДУК',
+      'ХИЖИНА', 'ХОЗЯИН', 'ЦВЕТОК', 'ЦЕМЕНТ', 'ЧАЙНИК', 'ЧЕРДАК', 'ШАМПУР', 'ШЛЮПКА', 'ШЛЯПКА', 'ЩЕБЕНЬ',
+      'ДВЕРЦА', 'ГЕРАНЬ', 'СЕРЬГА', 'БАЛКОН', 'БЕДНЯК', 'КНОПКА', 'РЫБАЛК', 'НАРЗАН', 'ПЧЕЛКА', 'ЭСТРАД',
+      'ГРЯДКА', 'ПОЛЬКА', 'ГИТАРА', 'КЛУМБА', 'КЕПОЧК', 'ГАНТЕЛ', 'ЖИЛИЩА', 'КЛОПИК', 'ТЕЛЕЖК', 'ПИРОЖО',
+      'КНОПКЕ', 'БУЙВОЛ', 'БАЗУКА', 'ВАЛЮТА', 'ЛЫЖНИК', 'КАЛИТК', 'МАНЖЕТ', 'МАРКИЗ', 'ПЛАТОК', 'ЯБЛОКО',
+    ];
 
-function defaultStats() {
-  return { played: 0, won: 0, currentStreak: 0, maxStreak: 0, distribution: [] };
-}
+    const WORDS_7 = [
+      'АБРИКОС', 'АВОКАДО', 'АКРОБАТ', 'АЛГЕБРА', 'АНТЕННА', 'АППАРАТ', 'АССОРТИ', 'АУКЦИОН', 'БАБОЧКА', 'БАКАЛЕЯ',
+      'БАЛЬЗАМ', 'БАРАНКА', 'БАСТИОН', 'БЕРЛОГА', 'БИЛЬЯРД', 'БОЛЕЗНЬ', 'БРОДЯГА', 'БУМАЖКА', 'БУТЫЛКА', 'ВАЛЕНОК',
+      'ВАРЕНИК', 'ВЕНТИЛЬ', 'ВЕРБЛЮД', 'ВЕРСТАК', 'ВИШЕНКА', 'ВОДОПАД', 'ВОРОБЕЙ', 'ВЫИГРЫШ', 'ГВАРДИЯ', 'ГЕНЕРАЛ',
+      'ГОРЧИЦА', 'ГАЛЕРЕЯ', 'ГЛАЗУРЬ', 'ГОЛУБКА', 'ГРОМАДА', 'ДЕВУШКА', 'ДЕРЕВНЯ', 'ДЕСЯТКА', 'ДЕТСТВО', 'ДНЕВНИК',
+      'ДОБАВКА', 'ДОВЕРИЕ', 'ДОРОЖКА', 'ДУБИНКА', 'ДУХОВКА', 'ЖУРАВЛЬ', 'ЗАГАДКА', 'ЗАКАТКА', 'ЗАПИСКА', 'ЗАПЛАТА',
+      'ЗАСОЛКА', 'ЗЕРКАЛО', 'ИЗДЕЛИЕ', 'ИЛЛЮЗИЯ', 'ИЗБУШКА', 'КАЛИТКА', 'КАМБАЛА', 'КАПУСТА', 'КАРАВАН', 'КАРТИНА',
+      'КИПАРИС', 'КОКЕТКА', 'КОЛБАСА', 'КОЛОДЕЦ', 'КОМЕДИЯ', 'КОПЕЙКА', 'КОРОБКА', 'КОРЗИНА', 'КРАСОТА', 'КРОВАТЬ',
+      'КРАПИВА', 'КРУПИЦА', 'ЛАВОЧКА', 'ЛИМОНАД', 'ЛИСИЧКА', 'ЛОВУШКА', 'ЛОПАТКА', 'ЛЯГУШКА', 'МАГАЗИН', 'МАЛИНКА',
+      'МАШИНКА', 'МЕДВЕДЬ', 'МОЛОТОК', 'МОРКОВЬ', 'НАДПИСЬ', 'НАЧИНКА', 'ОБЛАЧКО', 'ПАЛЬЧИК', 'ПАРОВОЗ', 'ПОДУШКА',
+      'ПОЛОТНО', 'ПШЕНИЦА', 'РАССВЕТ', 'РОЗЕТКА', 'РУСАЛКА', 'СЕКУНДА', 'СОЛОВЕЙ', 'СУВЕНИР', 'СЧАСТЬЕ', 'ТАРЕЛКА',
+      'ТЕТРАДЬ', 'ТРАКТОР', 'ЧЕМОДАН', 'ВИЗИТКА', 'ВРАТАРЬ', 'ВЫДУМКА', 'ГАРМОНЬ', 'ЗАТЫЧКА', 'ЗУБАТКА', 'КАБИНКА',
+      'ЛЕПЕШКА', 'ЛУКОВКА', 'ВЯЗАНКА', 'ГРАМОТА', 'ЗАЛЕЖКА', 'ЗАНАВЕС', 'ЗАПРАВА', 'ЗАСТАВА', 'ЗОЛОТКО', 'КАНАВКА',
+      'КЛАДОВК', 'КОНФЕТА', 'КОШЕЧКА', 'КРАСАВК', 'КУКУШКА', 'КУРОЧКА', 'КУХАРКА', 'ЛАМПОЧК', 'ЛЕТУЧКА', 'ПРОГУЛК',
+      'ПЫЛИНКА', 'РАКУШКА', 'ТРЯПОЧК', 'СВЯЗИСТ', 'САМОВАР', 'САПОЖОК', 'СИДЕЛКА', 'СНЕЖИНК', 'СОЛОНКА', 'СТОЯНКА',
+      'ТАЙНИКО', 'ТВОРОЖО', 'ТИГРИЦА', 'ТРОСТОЧ', 'УЛЫБОЧК', 'ХОЗЯЙКА', 'ШКАТУЛК', 'ЩЕКОЛДА', 'БАРЫШНЯ', 'ЗАДВИЖК',
+      'КЛЕЕНКА', 'ПОКУПКА', 'КОРОЧКА', 'КУВАЛДА', 'МАТРИЦА', 'ПРОБИРК', 'РЕАКЦИЯ', 'ПОЗИЦИЯ', 'СТАНЦИЯ', 'ТЕРАПИЯ',
+      'КАПИТАН', 'КАРАПУЗ', 'ЛАВАНДА', 'ТРЕВОГА', 'ЦАРЕВНА', 'ДЕВОЧКА', 'ПАЛАТКА', 'НАКИДКА', 'ГРИБНИК', 'ГОЛОСОК',
+      'БАЛЕРИН', 'ПОДВИЖК', 'СТРОЧКА', 'ЖАРОВНЯ', 'КАСТРЮЛ', 'ВЕРЕВКА', 'НОСИЛКА', 'ЗАДАЧКА', 'ТУШЕНКА', 'НАЖИВКА',
+      'МЕЛОДИЯ', 'НАТЯЖКА', 'ЗАВАРКА', 'МЕТЕЛКА', 'ТРЕЩИНА', 'ПРИЩЕПК', 'ПОДНОЖК', 'ВАТРУШК', 'ПРИЧУДА', 'ЯГОДИЦА',
+      'ТАБУРЕТ', 'БРАСЛЕТ', 'ГРАНИЦА', 'ЗАМОРОК', 'ЦАРАПИН', 'ЛАНДШАФ', 'СНАСТОЧ', 'ЛЕСЕНКА', 'СМОТРОВ', 'ЦАРСТВО',
+    ];
 
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
-  return null;
-}
+    // ===== SEEDED SHUFFLE =====
+    function seededShuffle(arr, seed) {
+      const a = [...arr];
+      let s = seed;
+      function rng() { s = (s * 16807 + 0) % 2147483647; return (s - 1) / 2147483646; }
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
 
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
+    const numSeed = typeof userId === 'number' ? userId : hashStr(String(userId));
+    function hashStr(s) { let h = 0; for (let i = 0; i < s.length; i++) { h = ((h << 5) - h + s.charCodeAt(i)) | 0; } return Math.abs(h); }
 
-let state = loadState() || {
-  userId,
-  currentGames: { 5: null, 6: null, 7: null },
-  stats: {
-    5: { ...defaultStats(), distribution: new Array(6).fill(0) },
-    6: { ...defaultStats(), distribution: new Array(7).fill(0) },
-    7: { ...defaultStats(), distribution: new Array(8).fill(0) },
-  },
-  wordIndex: { 5: 0, 6: 0, 7: 0 },
-};
-
-// ===== UI STATE =====
-let screen = 'menu'; // menu | game | stats
-let gameMode = 5;
-let statsTab = 5;
-let modal = null; // null | { type, ... }
-let toasts = [];
-let isRevealing = false;
-
-// ===== GAME LOGIC =====
-function getMaxAttempts(n) { return n + 1; }
-
-function startGame(mode) {
-  gameMode = mode;
-  if (!state.currentGames[mode] || state.currentGames[mode].status !== 'playing') {
-    const idx = state.wordIndex[mode] % SHUFFLED[mode].length;
-    state.currentGames[mode] = {
-      targetWord: SHUFFLED[mode][idx],
-      attempts: [],
-      evaluations: [],
-      status: 'playing',
+    const SHUFFLED = {
+      5: seededShuffle(WORDS_5, numSeed),
+      6: seededShuffle(WORDS_6, numSeed),
+      7: seededShuffle(WORDS_7, numSeed),
     };
-    saveState();
-  }
-  screen = 'game';
-  currentInput = '';
-  render();
-}
 
-function evaluate(guess, target) {
-  const n = target.length;
-  const result = new Array(n).fill('absent');
-  const tCounts = {};
-  for (const ch of target) tCounts[ch] = (tCounts[ch] || 0) + 1;
+    // ===== WORD VALIDATION VIA WIKTIONARY =====
+    // Cache validated words to avoid repeat API calls
+    const validWordCache = new Map();
 
-  // Pass 1: correct
-  for (let i = 0; i < n; i++) {
-    if (guess[i] === target[i]) {
-      result[i] = 'correct';
-      tCounts[guess[i]]--;
-    }
-  }
-  // Pass 2: present
-  for (let i = 0; i < n; i++) {
-    if (result[i] !== 'correct' && tCounts[guess[i]] > 0) {
-      result[i] = 'present';
-      tCounts[guess[i]]--;
-    }
-  }
-  return result;
-}
+    // Pre-seed cache with all target words (they are definitely valid)
+    [...WORDS_5, ...WORDS_6, ...WORDS_7].forEach(w => validWordCache.set(w, true));
 
-let currentInput = '';
+    async function isValidRussianWord(word) {
+      const upper = word.toUpperCase();
 
-function handleKey(key) {
-  if (isRevealing) return;
-  const game = state.currentGames[gameMode];
-  if (!game || game.status !== 'playing') return;
+      // Check cache first
+      if (validWordCache.has(upper)) return validWordCache.get(upper);
 
-  if (key === 'BACKSPACE') {
-    if (currentInput.length > 0) {
-      currentInput = currentInput.slice(0, -1);
-      haptic('light');
-      render();
-    }
-    return;
-  }
+      try {
+        const lower = word.toLowerCase();
+        // Fetch wikitext to check if the word is a noun (существительное)
+        const url = `https://ru.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(lower)}&prop=wikitext&format=json&origin=*`;
+        const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+        const data = await response.json();
 
-  if (key === 'ENTER') {
-    submitGuess();
-    return;
-  }
+        // If page doesn't exist, parse returns error
+        if (data.error) {
+          validWordCache.set(upper, false);
+          return false;
+        }
 
-  // Letter
-  if (/^[А-ЯА-Я]$/.test(key) && currentInput.length < gameMode) {
-    currentInput += key;
-    haptic('light');
-    render();
-  }
-}
-
-async function submitGuess() {
-  const game = state.currentGames[gameMode];
-  if (currentInput.length !== gameMode) {
-    showToast('Введите ' + gameMode + ' букв');
-    shakeCurrentRow();
-    return;
-  }
-
-  if (isValidating) return;
-
-  // Check if word exists in Russian Wiktionary
-  isValidating = true;
-  showToast('Проверяю слово…');
-  const isValid = await isValidRussianWord(currentInput);
-  // Remove the "checking" toast immediately
-  const tc = document.querySelector('.toast-container');
-  if (tc) tc.innerHTML = '';
-  isValidating = false;
-
-  if (!isValid) {
-    showToast('Введите существительное');
-    shakeCurrentRow();
-    haptic('error');
-    return;
-  }
-
-  const evaluation = evaluate(currentInput, game.targetWord);
-  game.attempts.push(currentInput);
-  game.evaluations.push(evaluation);
-
-  const won = evaluation.every(e => e === 'correct');
-  const lost = !won && game.attempts.length >= getMaxAttempts(gameMode);
-
-  if (won) game.status = 'won';
-  else if (lost) game.status = 'lost';
-
-  const guess = currentInput;
-  currentInput = '';
-
-  // Reveal animation
-  isRevealing = true;
-  render();
-  revealRow(game.attempts.length - 1, evaluation, () => {
-    isRevealing = false;
-    if (won) {
-      state.stats[gameMode].played++;
-      state.stats[gameMode].won++;
-      state.stats[gameMode].currentStreak++;
-      if (state.stats[gameMode].currentStreak > state.stats[gameMode].maxStreak)
-        state.stats[gameMode].maxStreak = state.stats[gameMode].currentStreak;
-      state.stats[gameMode].distribution[game.attempts.length - 1]++;
-      state.wordIndex[gameMode]++;
-      saveState();
-      haptic('success');
-      bounceWinRow(game.attempts.length - 1);
-      startConfetti();
-      setTimeout(() => {
-        modal = { type: 'win', attempts: game.attempts.length };
-        render();
-      }, 1600);
-    } else if (lost) {
-      state.stats[gameMode].played++;
-      state.stats[gameMode].currentStreak = 0;
-      saveState();
-      haptic('error');
-      setTimeout(() => {
-        modal = { type: 'lose' };
-        render();
-      }, 600);
-    } else {
-      saveState();
-    }
-    updateKeyboardColors();
-    render();
-  });
-}
-
-function nextWord() {
-  state.currentGames[gameMode] = null;
-  modal = null;
-  stopConfetti();
-  startGame(gameMode);
-}
-
-function retryWord() {
-  // Reset the current game but keep the same target word
-  const game = state.currentGames[gameMode];
-  if (game) {
-    game.attempts = [];
-    game.evaluations = [];
-    game.status = 'playing';
-    saveState();
-  }
-  modal = null;
-  currentInput = '';
-  render();
-}
-
-function goToMenu() {
-  screen = 'menu';
-  modal = null;
-  stopConfetti();
-  if (tg?.BackButton) tg.BackButton.hide();
-  render();
-}
-
-function goToStats() {
-  screen = 'stats';
-  statsTab = 5;
-  if (tg?.BackButton) { tg.BackButton.show(); tg.BackButton.onClick(goToMenu); }
-  render();
-}
-
-function resetStats() {
-  if (confirm('Сбросить всю статистику? Это действие нельзя отменить.')) {
-    state.stats = {
-      5: { ...defaultStats(), distribution: new Array(6).fill(0) },
-      6: { ...defaultStats(), distribution: new Array(7).fill(0) },
-      7: { ...defaultStats(), distribution: new Array(8).fill(0) },
-    };
-    state.currentGames = { 5: null, 6: null, 7: null };
-    state.wordIndex = { 5: 0, 6: 0, 7: 0 };
-    saveState();
-    render();
-  }
-}
-
-// ===== TOAST =====
-function showToast(msg) {
-  const tc = document.querySelector('.toast-container');
-  if (!tc) return;
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
-  tc.appendChild(t);
-  setTimeout(() => t.remove(), 2000);
-}
-
-function shakeCurrentRow() {
-  const game = state.currentGames[gameMode];
-  if (!game) return;
-  const rowIdx = game.attempts.length;
-  const row = document.querySelector(`.grid-row[data-row="${rowIdx}"]`);
-  if (row) {
-    row.classList.add('shake');
-    setTimeout(() => row.classList.remove('shake'), 400);
-  }
-}
-
-// ===== REVEAL ANIMATION =====
-function revealRow(rowIdx, evaluation, callback) {
-  const row = document.querySelector(`.grid-row[data-row="${rowIdx}"]`);
-  if (!row) { callback(); return; }
-  const cells = row.querySelectorAll('.cell');
-  const classes = ['absent', 'present', 'correct'];
-  let revealed = 0;
-
-  cells.forEach((cell, i) => {
-    setTimeout(() => {
-      cell.classList.add('flip-out');
-      setTimeout(() => {
-        cell.classList.remove('flip-out', 'filled');
-        cell.classList.add(evaluation[i], 'flip');
-        setTimeout(() => {
-          cell.classList.remove('flip');
-          revealed++;
-          if (revealed === cells.length && callback) callback();
-        }, 300);
-      }, 300);
-    }, i * 200);
-  });
-}
-
-function bounceWinRow(rowIdx) {
-  setTimeout(() => {
-    const row = document.querySelector(`.grid-row[data-row="${rowIdx}"]`);
-    if (row) {
-      const cells = row.querySelectorAll('.cell');
-      cells.forEach((cell, i) => {
-        setTimeout(() => {
-          cell.style.animation = 'bounce 0.6s ease';
-          setTimeout(() => cell.style.animation = '', 600);
-        }, i * 80);
-      });
-    }
-  }, 200);
-}
-
-// ===== KEYBOARD COLORS =====
-function getKeyboardColors() {
-  const colors = {};
-  const game = state.currentGames[gameMode];
-  if (!game) return colors;
-  const priority = { absent: 1, present: 2, correct: 3 };
-
-  for (let a = 0; a < game.attempts.length; a++) {
-    const word = game.attempts[a];
-    const ev = game.evaluations[a];
-    if (!ev) continue;
-    for (let i = 0; i < word.length; i++) {
-      const ch = word[i];
-      const cur = colors[ch];
-      if (!cur || priority[ev[i]] > priority[cur]) {
-        colors[ch] = ev[i];
+        const wikitext = data.parse.wikitext['*'];
+        // Check for Russian noun markers in wikitext:
+        // {{сущ ru — standard noun template
+        // {{Существительное — alternative heading
+        const isNoun = /\{\{сущ[\s-]ru/i.test(wikitext) ||
+          /===\s*Существительное/i.test(wikitext) ||
+          /\{\{сущ[\s-]be/i.test(wikitext);
+        validWordCache.set(upper, isNoun);
+        return isNoun;
+      } catch (e) {
+        // Network error or timeout — accept the word to not block gameplay
+        validWordCache.set(upper, true);
+        return true;
       }
     }
-  }
-  return colors;
-}
 
-function updateKeyboardColors() {
-  const colors = getKeyboardColors();
-  document.querySelectorAll('.key[data-key]').forEach(key => {
-    const ch = key.dataset.key;
-    key.classList.remove('correct', 'present', 'absent');
-    if (colors[ch]) key.classList.add(colors[ch]);
-  });
-}
+    let isValidating = false;
 
-// ===== CONFETTI =====
-const confettiCanvas = document.getElementById('confetti-canvas');
-const ctx = confettiCanvas.getContext('2d');
-let confettiParticles = [];
-let confettiRAF = null;
+    // ===== STATE MANAGEMENT =====
+    const STORAGE_KEY = `wordgame_${userId}`;
 
-function resizeConfetti() {
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeConfetti);
-resizeConfetti();
+    function defaultStats() {
+      return { played: 0, won: 0, currentStreak: 0, maxStreak: 0, distribution: [] };
+    }
 
-function startConfetti() {
-  confettiParticles = [];
-  const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FF8C94', '#A8E6CF', '#FDFD96'];
-  for (let i = 0; i < 150; i++) {
-    confettiParticles.push({
-      x: Math.random() * confettiCanvas.width,
-      y: -20 - Math.random() * 300,
-      w: 6 + Math.random() * 6,
-      h: 4 + Math.random() * 4,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      vx: (Math.random() - 0.5) * 4,
-      vy: 2 + Math.random() * 3,
-      rot: Math.random() * 360,
-      vr: (Math.random() - 0.5) * 10,
-      opacity: 1,
-    });
-  }
-  animateConfetti();
-}
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) { }
+      return null;
+    }
 
-function animateConfetti() {
-  ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-  let alive = false;
-  confettiParticles.forEach(p => {
-    p.x += p.vx;
-    p.y += p.vy;
-    p.vy += 0.05;
-    p.rot += p.vr;
-    if (p.y > confettiCanvas.height + 20) { p.opacity -= 0.02; }
-    if (p.opacity <= 0) return;
-    alive = true;
-    ctx.save();
-    ctx.globalAlpha = Math.max(0, p.opacity);
-    ctx.translate(p.x, p.y);
-    ctx.rotate((p.rot * Math.PI) / 180);
-    ctx.fillStyle = p.color;
-    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-    ctx.restore();
-  });
-  if (alive) confettiRAF = requestAnimationFrame(animateConfetti);
-}
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
 
-function stopConfetti() {
-  if (confettiRAF) cancelAnimationFrame(confettiRAF);
-  confettiRAF = null;
-  ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-  confettiParticles = [];
-}
+    let state = loadState() || {
+      userId,
+      currentGames: { 5: null, 6: null, 7: null },
+      stats: {
+        5: { ...defaultStats(), distribution: new Array(6).fill(0) },
+        6: { ...defaultStats(), distribution: new Array(7).fill(0) },
+        7: { ...defaultStats(), distribution: new Array(8).fill(0) },
+      },
+      wordIndex: { 5: 0, 6: 0, 7: 0 },
+    };
 
-// ===== RENDER =====
-const app = document.getElementById('app');
+    // ===== UI STATE =====
+    let screen = 'menu'; // menu | game | stats
+    let gameMode = 5;
+    let statsTab = 5;
+    let modal = null; // null | { type, ... }
+    let toasts = [];
+    let isRevealing = false;
 
-function render() {
-  if (screen === 'menu') renderMenu();
-  else if (screen === 'game') renderGame();
-  else if (screen === 'stats') renderStats();
-}
+    // ===== GAME LOGIC =====
+    function getMaxAttempts(n) { return n + 1; }
 
-function renderMenu() {
-  let html = `
+    function startGame(mode) {
+      gameMode = mode;
+      if (!state.currentGames[mode] || state.currentGames[mode].status !== 'playing') {
+        const idx = state.wordIndex[mode] % SHUFFLED[mode].length;
+        state.currentGames[mode] = {
+          targetWord: SHUFFLED[mode][idx],
+          attempts: [],
+          evaluations: [],
+          status: 'playing',
+        };
+        saveState();
+      }
+      screen = 'game';
+      currentInput = '';
+      render();
+    }
+
+    function evaluate(guess, target) {
+      const n = target.length;
+      const result = new Array(n).fill('absent');
+      const tCounts = {};
+      for (const ch of target) tCounts[ch] = (tCounts[ch] || 0) + 1;
+
+      // Pass 1: correct
+      for (let i = 0; i < n; i++) {
+        if (guess[i] === target[i]) {
+          result[i] = 'correct';
+          tCounts[guess[i]]--;
+        }
+      }
+      // Pass 2: present
+      for (let i = 0; i < n; i++) {
+        if (result[i] !== 'correct' && tCounts[guess[i]] > 0) {
+          result[i] = 'present';
+          tCounts[guess[i]]--;
+        }
+      }
+      return result;
+    }
+
+    let currentInput = '';
+
+    function handleKey(key) {
+      if (isRevealing) return;
+      const game = state.currentGames[gameMode];
+      if (!game || game.status !== 'playing') return;
+
+      if (key === 'BACKSPACE') {
+        if (currentInput.length > 0) {
+          currentInput = currentInput.slice(0, -1);
+          haptic('light');
+          render();
+        }
+        return;
+      }
+
+      if (key === 'ENTER') {
+        submitGuess();
+        return;
+      }
+
+      // Letter
+      if (/^[А-ЯА-Я]$/.test(key) && currentInput.length < gameMode) {
+        currentInput += key;
+        haptic('light');
+        render();
+      }
+    }
+
+    async function submitGuess() {
+      const game = state.currentGames[gameMode];
+      if (currentInput.length !== gameMode) {
+        showToast('Введите ' + gameMode + ' букв');
+        shakeCurrentRow();
+        return;
+      }
+
+      if (isValidating) return;
+
+      // Check if word exists in Russian Wiktionary
+      isValidating = true;
+      showToast('Проверяю слово…');
+      const isValid = await isValidRussianWord(currentInput);
+      // Remove the "checking" toast immediately
+      const tc = document.querySelector('.toast-container');
+      if (tc) tc.innerHTML = '';
+      isValidating = false;
+
+      if (!isValid) {
+        showToast('Введите существительное');
+        shakeCurrentRow();
+        haptic('error');
+        return;
+      }
+
+      const evaluation = evaluate(currentInput, game.targetWord);
+      game.attempts.push(currentInput);
+      game.evaluations.push(evaluation);
+
+      const won = evaluation.every(e => e === 'correct');
+      const lost = !won && game.attempts.length >= getMaxAttempts(gameMode);
+
+      if (won) game.status = 'won';
+      else if (lost) game.status = 'lost';
+
+      const guess = currentInput;
+      currentInput = '';
+
+      // Reveal animation
+      isRevealing = true;
+      render();
+      revealRow(game.attempts.length - 1, evaluation, () => {
+        isRevealing = false;
+        if (won) {
+          state.stats[gameMode].played++;
+          state.stats[gameMode].won++;
+          state.stats[gameMode].currentStreak++;
+          if (state.stats[gameMode].currentStreak > state.stats[gameMode].maxStreak)
+            state.stats[gameMode].maxStreak = state.stats[gameMode].currentStreak;
+          state.stats[gameMode].distribution[game.attempts.length - 1]++;
+          state.wordIndex[gameMode]++;
+          saveState();
+          haptic('success');
+          bounceWinRow(game.attempts.length - 1);
+          startConfetti();
+          setTimeout(() => {
+            modal = { type: 'win', attempts: game.attempts.length };
+            render();
+          }, 1600);
+        } else if (lost) {
+          state.stats[gameMode].played++;
+          state.stats[gameMode].currentStreak = 0;
+          saveState();
+          haptic('error');
+          setTimeout(() => {
+            modal = { type: 'lose' };
+            render();
+          }, 600);
+        } else {
+          saveState();
+        }
+        updateKeyboardColors();
+        render();
+      });
+    }
+
+    function nextWord() {
+      state.currentGames[gameMode] = null;
+      modal = null;
+      stopConfetti();
+      startGame(gameMode);
+    }
+
+    function retryWord() {
+      // Reset the current game but keep the same target word
+      const game = state.currentGames[gameMode];
+      if (game) {
+        game.attempts = [];
+        game.evaluations = [];
+        game.status = 'playing';
+        saveState();
+      }
+      modal = null;
+      currentInput = '';
+      render();
+    }
+
+    function goToMenu() {
+      screen = 'menu';
+      modal = null;
+      stopConfetti();
+      if (tg?.BackButton) tg.BackButton.hide();
+      render();
+    }
+
+    function goToStats() {
+      screen = 'stats';
+      statsTab = 5;
+      if (tg?.BackButton) { tg.BackButton.show(); tg.BackButton.onClick(goToMenu); }
+      render();
+    }
+
+    function resetStats() {
+      if (confirm('Сбросить всю статистику? Это действие нельзя отменить.')) {
+        state.stats = {
+          5: { ...defaultStats(), distribution: new Array(6).fill(0) },
+          6: { ...defaultStats(), distribution: new Array(7).fill(0) },
+          7: { ...defaultStats(), distribution: new Array(8).fill(0) },
+        };
+        state.currentGames = { 5: null, 6: null, 7: null };
+        state.wordIndex = { 5: 0, 6: 0, 7: 0 };
+        saveState();
+        render();
+      }
+    }
+
+    // ===== TOAST =====
+    function showToast(msg) {
+      const tc = document.querySelector('.toast-container');
+      if (!tc) return;
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      tc.appendChild(t);
+      setTimeout(() => t.remove(), 2000);
+    }
+
+    function shakeCurrentRow() {
+      const game = state.currentGames[gameMode];
+      if (!game) return;
+      const rowIdx = game.attempts.length;
+      const row = document.querySelector(`.grid-row[data-row="${rowIdx}"]`);
+      if (row) {
+        row.classList.add('shake');
+        setTimeout(() => row.classList.remove('shake'), 400);
+      }
+    }
+
+    // ===== REVEAL ANIMATION =====
+    function revealRow(rowIdx, evaluation, callback) {
+      const row = document.querySelector(`.grid-row[data-row="${rowIdx}"]`);
+      if (!row) { callback(); return; }
+      const cells = row.querySelectorAll('.cell');
+      const classes = ['absent', 'present', 'correct'];
+      let revealed = 0;
+
+      cells.forEach((cell, i) => {
+        setTimeout(() => {
+          cell.classList.add('flip-out');
+          setTimeout(() => {
+            cell.classList.remove('flip-out', 'filled');
+            cell.classList.add(evaluation[i], 'flip');
+            setTimeout(() => {
+              cell.classList.remove('flip');
+              revealed++;
+              if (revealed === cells.length && callback) callback();
+            }, 300);
+          }, 300);
+        }, i * 200);
+      });
+    }
+
+    function bounceWinRow(rowIdx) {
+      setTimeout(() => {
+        const row = document.querySelector(`.grid-row[data-row="${rowIdx}"]`);
+        if (row) {
+          const cells = row.querySelectorAll('.cell');
+          cells.forEach((cell, i) => {
+            setTimeout(() => {
+              cell.style.animation = 'bounce 0.6s ease';
+              setTimeout(() => cell.style.animation = '', 600);
+            }, i * 80);
+          });
+        }
+      }, 200);
+    }
+
+    // ===== KEYBOARD COLORS =====
+    function getKeyboardColors() {
+      const colors = {};
+      const game = state.currentGames[gameMode];
+      if (!game) return colors;
+      const priority = { absent: 1, present: 2, correct: 3 };
+
+      for (let a = 0; a < game.attempts.length; a++) {
+        const word = game.attempts[a];
+        const ev = game.evaluations[a];
+        if (!ev) continue;
+        for (let i = 0; i < word.length; i++) {
+          const ch = word[i];
+          const cur = colors[ch];
+          if (!cur || priority[ev[i]] > priority[cur]) {
+            colors[ch] = ev[i];
+          }
+        }
+      }
+      return colors;
+    }
+
+    function updateKeyboardColors() {
+      const colors = getKeyboardColors();
+      document.querySelectorAll('.key[data-key]').forEach(key => {
+        const ch = key.dataset.key;
+        key.classList.remove('correct', 'present', 'absent');
+        if (colors[ch]) key.classList.add(colors[ch]);
+      });
+    }
+
+    // ===== CONFETTI =====
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const ctx = confettiCanvas.getContext('2d');
+    let confettiParticles = [];
+    let confettiRAF = null;
+
+    function resizeConfetti() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeConfetti);
+    resizeConfetti();
+
+    function startConfetti() {
+      confettiParticles = [];
+      const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FF8C94', '#A8E6CF', '#FDFD96'];
+      for (let i = 0; i < 150; i++) {
+        confettiParticles.push({
+          x: Math.random() * confettiCanvas.width,
+          y: -20 - Math.random() * 300,
+          w: 6 + Math.random() * 6,
+          h: 4 + Math.random() * 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 4,
+          vy: 2 + Math.random() * 3,
+          rot: Math.random() * 360,
+          vr: (Math.random() - 0.5) * 10,
+          opacity: 1,
+        });
+      }
+      animateConfetti();
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      let alive = false;
+      confettiParticles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.05;
+        p.rot += p.vr;
+        if (p.y > confettiCanvas.height + 20) { p.opacity -= 0.02; }
+        if (p.opacity <= 0) return;
+        alive = true;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.opacity);
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rot * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      });
+      if (alive) confettiRAF = requestAnimationFrame(animateConfetti);
+    }
+
+    function stopConfetti() {
+      if (confettiRAF) cancelAnimationFrame(confettiRAF);
+      confettiRAF = null;
+      ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      confettiParticles = [];
+    }
+
+    // ===== RENDER =====
+    const app = document.getElementById('app');
+
+    function render() {
+      if (screen === 'menu') renderMenu();
+      else if (screen === 'game') renderGame();
+      else if (screen === 'stats') renderStats();
+    }
+
+    function renderMenu() {
+      let html = `
     <div class="menu-screen">
       <div class="menu-logo">УГАДАЙ<br>СЛОВО</div>
       <div class="menu-subtitle">Игра в слова на русском языке</div>
       <div class="menu-modes">
   `;
-  [5, 6, 7].forEach(n => {
-    const s = state.stats[n];
-    const progress = state.wordIndex[n] || 0;
-    const total = SHUFFLED[n].length;
-    let squares = '';
-    for (let i = 0; i < n; i++) squares += '<div class="mode-sq"></div>';
-    html += `
+      [5, 6, 7].forEach(n => {
+        const s = state.stats[n];
+        const progress = state.wordIndex[n] || 0;
+        const total = SHUFFLED[n].length;
+        let squares = '';
+        for (let i = 0; i < n; i++) squares += '<div class="mode-sq"></div>';
+        html += `
       <button class="menu-mode-btn" onclick="startGame(${n})" id="mode-btn-${n}">
         <div class="mode-label">
           <div class="mode-squares">${squares}</div>
@@ -945,75 +1346,75 @@ function renderMenu() {
         <span class="mode-progress">${progress} / ${total}</span>
       </button>
     `;
-  });
-  html += `
+      });
+      html += `
       </div>
       <button class="menu-stats-btn" onclick="goToStats()" id="stats-btn">📊 Статистика</button>
     </div>
   `;
-  app.innerHTML = html;
-}
-
-function renderGame() {
-  const game = state.currentGames[gameMode];
-  if (!game) return;
-  const maxAttempts = getMaxAttempts(gameMode);
-  const kbColors = getKeyboardColors();
-
-  let gridHtml = '<div class="grid">';
-  for (let r = 0; r < maxAttempts; r++) {
-    gridHtml += `<div class="grid-row" data-row="${r}">`;
-    for (let c = 0; c < gameMode; c++) {
-      let letter = '';
-      let cls = 'cell';
-      if (r < game.attempts.length) {
-        letter = game.attempts[r][c];
-        const ev = game.evaluations[r];
-        if (ev && !isRevealing || (isRevealing && r < game.attempts.length - 1)) {
-          cls += ' ' + ev[c];
-        } else if (isRevealing && r === game.attempts.length - 1) {
-          cls += ' filled';
-        }
-      } else if (r === game.attempts.length) {
-        if (c < currentInput.length) {
-          letter = currentInput[c];
-          cls += ' filled';
-        }
-      }
-      gridHtml += `<div class="${cls}" aria-label="${letter || 'пусто'}">${letter}</div>`;
+      app.innerHTML = html;
     }
-    gridHtml += '</div>';
-  }
-  gridHtml += '</div>';
 
-  // Keyboard
-  const rows = [
-    ['Й','Ц','У','К','Е','Н','Г','Ш','Щ','З','Х','Ъ'],
-    ['Ф','Ы','В','А','П','Р','О','Л','Д','Ж','Э'],
-    ['ENTER','Я','Ч','С','М','И','Т','Ь','Б','Ю','BACKSPACE'],
-  ];
+    function renderGame() {
+      const game = state.currentGames[gameMode];
+      if (!game) return;
+      const maxAttempts = getMaxAttempts(gameMode);
+      const kbColors = getKeyboardColors();
 
-  let kbHtml = '<div class="keyboard">';
-  rows.forEach(row => {
-    kbHtml += '<div class="kb-row">';
-    row.forEach(k => {
-      if (k === 'ENTER') {
-        kbHtml += `<button class="key wide" data-action="enter" onclick="handleKey('ENTER')" aria-label="Ввод">✓</button>`;
-      } else if (k === 'BACKSPACE') {
-        kbHtml += `<button class="key wide" data-action="backspace" onclick="handleKey('BACKSPACE')" aria-label="Удалить">⌫</button>`;
-      } else {
-        const colorClass = kbColors[k] ? ' ' + kbColors[k] : '';
-        kbHtml += `<button class="key${colorClass}" data-key="${k}" onclick="handleKey('${k}')">${k}</button>`;
+      let gridHtml = '<div class="grid">';
+      for (let r = 0; r < maxAttempts; r++) {
+        gridHtml += `<div class="grid-row" data-row="${r}">`;
+        for (let c = 0; c < gameMode; c++) {
+          let letter = '';
+          let cls = 'cell';
+          if (r < game.attempts.length) {
+            letter = game.attempts[r][c];
+            const ev = game.evaluations[r];
+            if (ev && !isRevealing || (isRevealing && r < game.attempts.length - 1)) {
+              cls += ' ' + ev[c];
+            } else if (isRevealing && r === game.attempts.length - 1) {
+              cls += ' filled';
+            }
+          } else if (r === game.attempts.length) {
+            if (c < currentInput.length) {
+              letter = currentInput[c];
+              cls += ' filled';
+            }
+          }
+          gridHtml += `<div class="${cls}" aria-label="${letter || 'пусто'}">${letter}</div>`;
+        }
+        gridHtml += '</div>';
       }
-    });
-    kbHtml += '</div>';
-  });
-  kbHtml += '</div>';
+      gridHtml += '</div>';
 
-  let modalHtml = '';
-  if (modal) {
-    if (modal.type === 'win') {
-      modalHtml = `
+      // Keyboard
+      const rows = [
+        ['Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ'],
+        ['Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э'],
+        ['ENTER', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', 'BACKSPACE'],
+      ];
+
+      let kbHtml = '<div class="keyboard">';
+      rows.forEach(row => {
+        kbHtml += '<div class="kb-row">';
+        row.forEach(k => {
+          if (k === 'ENTER') {
+            kbHtml += `<button class="key wide" data-action="enter" onclick="handleKey('ENTER')" aria-label="Ввод">✓</button>`;
+          } else if (k === 'BACKSPACE') {
+            kbHtml += `<button class="key wide" data-action="backspace" onclick="handleKey('BACKSPACE')" aria-label="Удалить">⌫</button>`;
+          } else {
+            const colorClass = kbColors[k] ? ' ' + kbColors[k] : '';
+            kbHtml += `<button class="key${colorClass}" data-key="${k}" onclick="handleKey('${k}')">${k}</button>`;
+          }
+        });
+        kbHtml += '</div>';
+      });
+      kbHtml += '</div>';
+
+      let modalHtml = '';
+      if (modal) {
+        if (modal.type === 'win') {
+          modalHtml = `
         <div class="modal-overlay" onclick="if(event.target===this){modal=null;render();}">
           <div class="modal">
             <h2>🎉 Победа!</h2>
@@ -1023,8 +1424,8 @@ function renderGame() {
           </div>
         </div>
       `;
-    } else if (modal.type === 'lose') {
-      modalHtml = `
+        } else if (modal.type === 'lose') {
+          modalHtml = `
         <div class="modal-overlay" onclick="if(event.target===this){modal=null;render();}">
           <div class="modal">
             <h2>😔 Не угадали</h2>
@@ -1034,10 +1435,10 @@ function renderGame() {
           </div>
         </div>
       `;
-    }
-  }
+        }
+      }
 
-  app.innerHTML = `
+      app.innerHTML = `
     <div class="game-screen">
       <div class="header">
         <div class="header-left">
@@ -1055,44 +1456,44 @@ function renderGame() {
     </div>
   `;
 
-  if (tg?.BackButton) { tg.BackButton.show(); tg.BackButton.onClick(goToMenu); }
-  // Adaptive cell size
-  adaptCellSize();
-}
+      if (tg?.BackButton) { tg.BackButton.show(); tg.BackButton.onClick(goToMenu); }
+      // Adaptive cell size
+      adaptCellSize();
+    }
 
-function adaptCellSize() {
-  const vw = window.innerWidth;
-  const maxCellW = Math.floor((Math.min(vw, 500) - 40) / gameMode);
-  const cellSize = Math.min(56, maxCellW);
-  document.documentElement.style.setProperty('--cell-size', cellSize + 'px');
-}
+    function adaptCellSize() {
+      const vw = window.innerWidth;
+      const maxCellW = Math.floor((Math.min(vw, 500) - 40) / gameMode);
+      const cellSize = Math.min(56, maxCellW);
+      document.documentElement.style.setProperty('--cell-size', cellSize + 'px');
+    }
 
-function renderStats() {
-  const s = state.stats[statsTab];
-  const winPct = s.played > 0 ? Math.round((s.won / s.played) * 100) : 0;
-  const maxDist = Math.max(...s.distribution, 1);
+    function renderStats() {
+      const s = state.stats[statsTab];
+      const winPct = s.played > 0 ? Math.round((s.won / s.played) * 100) : 0;
+      const maxDist = Math.max(...s.distribution, 1);
 
-  let tabsHtml = '';
-  [5, 6, 7].forEach(n => {
-    tabsHtml += `<button class="stats-tab${statsTab === n ? ' active' : ''}" onclick="statsTab=${n};render();">${n} букв</button>`;
-  });
+      let tabsHtml = '';
+      [5, 6, 7].forEach(n => {
+        tabsHtml += `<button class="stats-tab${statsTab === n ? ' active' : ''}" onclick="statsTab=${n};render();">${n} букв</button>`;
+      });
 
-  // Total stats across all modes
-  let totalPlayed = 0, totalWon = 0, bestStreak = 0, curStreak = 0;
-  [5, 6, 7].forEach(n => {
-    totalPlayed += state.stats[n].played;
-    totalWon += state.stats[n].won;
-    if (state.stats[n].maxStreak > bestStreak) bestStreak = state.stats[n].maxStreak;
-    curStreak += state.stats[n].currentStreak;
-  });
-  const totalPct = totalPlayed > 0 ? Math.round((totalWon / totalPlayed) * 100) : 0;
+      // Total stats across all modes
+      let totalPlayed = 0, totalWon = 0, bestStreak = 0, curStreak = 0;
+      [5, 6, 7].forEach(n => {
+        totalPlayed += state.stats[n].played;
+        totalWon += state.stats[n].won;
+        if (state.stats[n].maxStreak > bestStreak) bestStreak = state.stats[n].maxStreak;
+        curStreak += state.stats[n].currentStreak;
+      });
+      const totalPct = totalPlayed > 0 ? Math.round((totalWon / totalPlayed) * 100) : 0;
 
-  let distHtml = '';
-  s.distribution.forEach((count, i) => {
-    const pct = maxDist > 0 ? Math.max(8, (count / maxDist) * 100) : 8;
-    const isLast = state.currentGames[statsTab]?.status === 'won' &&
-      state.currentGames[statsTab].attempts.length === i + 1;
-    distHtml += `
+      let distHtml = '';
+      s.distribution.forEach((count, i) => {
+        const pct = maxDist > 0 ? Math.max(8, (count / maxDist) * 100) : 8;
+        const isLast = state.currentGames[statsTab]?.status === 'won' &&
+          state.currentGames[statsTab].attempts.length === i + 1;
+        distHtml += `
       <div class="dist-row">
         <div class="dist-label">${i + 1}</div>
         <div class="dist-bar-wrap">
@@ -1100,9 +1501,9 @@ function renderStats() {
         </div>
       </div>
     `;
-  });
+      });
 
-  app.innerHTML = `
+      app.innerHTML = `
     <div class="game-screen">
       <div class="header">
         <div class="header-left">
@@ -1130,33 +1531,34 @@ function renderStats() {
     </div>
   `;
 
-  if (tg?.BackButton) { tg.BackButton.show(); tg.BackButton.onClick(goToMenu); }
-}
+      if (tg?.BackButton) { tg.BackButton.show(); tg.BackButton.onClick(goToMenu); }
+    }
 
-function attemptWord(n) {
-  if (n === 1) return 'попытку';
-  if (n >= 2 && n <= 4) return 'попытки';
-  return 'попыток';
-}
+    function attemptWord(n) {
+      if (n === 1) return 'попытку';
+      if (n >= 2 && n <= 4) return 'попытки';
+      return 'попыток';
+    }
 
-// ===== KEYBOARD INPUT =====
-document.addEventListener('keydown', e => {
-  if (screen !== 'game') return;
-  if (e.key === 'Enter') { handleKey('ENTER'); e.preventDefault(); }
-  else if (e.key === 'Backspace') { handleKey('BACKSPACE'); e.preventDefault(); }
-  else {
-    const upper = e.key.toUpperCase();
-    if (/^[А-Я]$/.test(upper)) handleKey(upper);
-  }
-});
+    // ===== KEYBOARD INPUT =====
+    document.addEventListener('keydown', e => {
+      if (screen !== 'game') return;
+      if (e.key === 'Enter') { handleKey('ENTER'); e.preventDefault(); }
+      else if (e.key === 'Backspace') { handleKey('BACKSPACE'); e.preventDefault(); }
+      else {
+        const upper = e.key.toUpperCase();
+        if (/^[А-Я]$/.test(upper)) handleKey(upper);
+      }
+    });
 
-// ===== INIT =====
-render();
+    // ===== INIT =====
+    render();
 
-// Handle resize
-window.addEventListener('resize', () => {
-  if (screen === 'game') adaptCellSize();
-});
-</script>
+    // Handle resize
+    window.addEventListener('resize', () => {
+      if (screen === 'game') adaptCellSize();
+    });
+  </script>
 </body>
+
 </html>
