@@ -1693,49 +1693,16 @@
       7: seededShuffle(WORDS_7, numSeed),
     };
 
-    // ===== WORD VALIDATION VIA WIKTIONARY =====
-    // Cache validated words to avoid repeat API calls
-    const validWordCache = new Map();
+    // ===== WORD VALIDATION VIA LOCAL DICTIONARY =====
+    const VALID_WORDS = {
+      5: new Set(WORDS_5),
+      6: new Set(WORDS_6),
+      7: new Set(WORDS_7),
+    };
 
-    // Pre-seed cache with all target words (they are definitely valid)
-    [...WORDS_5, ...WORDS_6, ...WORDS_7].forEach(w => validWordCache.set(w, true));
-
-    async function isValidRussianWord(word) {
-      const upper = word.toUpperCase();
-
-      // Check cache first
-      if (validWordCache.has(upper)) return validWordCache.get(upper);
-
-      try {
-        const lower = word.toLowerCase();
-        // Fetch wikitext to check if the word is a noun (существительное)
-        const url = `https://ru.wiktionary.org/w/api.php?action=parse&page=${encodeURIComponent(lower)}&prop=wikitext&format=json&origin=*`;
-        const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
-        const data = await response.json();
-
-        // If page doesn't exist, parse returns error
-        if (data.error) {
-          validWordCache.set(upper, false);
-          return false;
-        }
-
-        const wikitext = data.parse.wikitext['*'];
-        // Check for Russian noun markers in wikitext:
-        // {{сущ ru — standard noun template
-        // {{Существительное — alternative heading
-        const isNoun = /\{\{сущ[\s-]ru/i.test(wikitext) ||
-          /===\s*Существительное/i.test(wikitext) ||
-          /\{\{сущ[\s-]be/i.test(wikitext);
-        validWordCache.set(upper, isNoun);
-        return isNoun;
-      } catch (e) {
-        // Network error or timeout — accept the word to not block gameplay
-        validWordCache.set(upper, true);
-        return true;
-      }
+    function isValidWord(word, length) {
+      return VALID_WORDS[length].has(word.toUpperCase());
     }
-
-    let isValidating = false;
 
     // ===== STATE MANAGEMENT =====
     const STORAGE_KEY = `wordgame_${userId}`;
@@ -1847,7 +1814,7 @@
       }
     }
 
-    async function submitGuess() {
+    function submitGuess() {
       const game = state.currentGames[gameMode];
       if (currentInput.length !== gameMode) {
         showToast('Введите ' + gameMode + ' букв');
@@ -1855,19 +1822,9 @@
         return;
       }
 
-      if (isValidating) return;
-
-      // Check if word exists in Russian Wiktionary
-      isValidating = true;
-      showToast('Проверяю слово…');
-      const isValid = await isValidRussianWord(currentInput);
-      // Remove the "checking" toast immediately
-      const tc = document.querySelector('.toast-container');
-      if (tc) tc.innerHTML = '';
-      isValidating = false;
-
-      if (!isValid) {
-        showToast('Введите существительное');
+      // Check if word exists in our dictionary
+      if (!isValidWord(currentInput, gameMode)) {
+        showToast('Такого слова нет в словаре');
         shakeCurrentRow();
         haptic('error');
         return;
