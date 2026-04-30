@@ -1732,6 +1732,12 @@
 
     function startGame(mode) {
       gameMode = mode;
+      // Check if saved game has a target word that's no longer in the current word list
+      const savedGame = state.currentGames[mode];
+      if (savedGame && savedGame.status === 'playing' && !VALID_WORDS[mode].has(savedGame.targetWord)) {
+        // Word list was updated — reset this game with a new word
+        state.currentGames[mode] = null;
+      }
       if (!state.currentGames[mode] || state.currentGames[mode].status !== 'playing') {
         const idx = state.wordIndex[mode] % SHUFFLED[mode].length;
         state.currentGames[mode] = {
